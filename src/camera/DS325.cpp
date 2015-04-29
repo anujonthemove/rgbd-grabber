@@ -14,6 +14,9 @@ DS325::DS325(const size_t deviceNo, const DepthSense::FrameFormat frameFormat) :
         _compression(COMPRESSION_TYPE_MJPEG),
         _dsize(320, 240),
         _context(Context::create("localhost")) {
+        
+        usingUSB30Flag = true; // if the camera is plugged on a USB 3.0 port
+
     if (_format == FRAME_FORMAT_WXGA_H) {
         _csize.width = 1280;
         _csize.height = 720;
@@ -38,14 +41,27 @@ DS325::DS325(const size_t deviceNo, const DepthSense::FrameFormat frameFormat) :
         devices[deviceNo].nodeRemovedEvent().connect(this, &DS325::onNodeDisconnected);
 
         for (Node node: devices[deviceNo].getNodes()) {
-            if (node.is<DepthNode>() && !_dnode.isSet())
+            if (node.is<DepthNode>() && !_dnode.isSet()) {
+                
                 configureDepthNode(node);
-            else if (node.is<ColorNode>() && !_cnode.isSet())
-                configureColorNode(node);
-            else if (node.is<AudioNode>() && !_anode.isSet())
-                configureAudioNode(node);
-
             _context.registerNode(node);
+
+
+            }
+            else if (node.is<ColorNode>() && !_cnode.isSet()) {
+                configureColorNode(node);
+            _context.registerNode(node);
+                
+
+            }
+            else if (node.is<AudioNode>() && !_anode.isSet()) {
+                
+                configureAudioNode(node);
+                if (usingUSB30Flag != 1) _context.registerNode(node); // switch this off to save bandwidth
+
+            }
+
+            // _context.registerNode(node);
         }
 
         std::cout << "DS325: opened" << std::endl;

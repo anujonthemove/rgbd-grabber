@@ -40,6 +40,7 @@ public:
 
     virtual void captureColoredPointCloud(ColoredPointCloud::Ptr buffer);
 
+    bool usingUSB30Flag;
     /**
      * Copy the latest audio data to the buffer.
      * Note that the buffer must be allocated in advance.

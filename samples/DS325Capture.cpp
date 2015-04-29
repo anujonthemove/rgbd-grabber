@@ -25,10 +25,10 @@ int main(int argc, char *argv[]) {
     cv::Mat depth = cv::Mat::zeros(camera->depthSize(), CV_16U);
     cv::Mat amplitude = cv::Mat::zeros(camera->depthSize(), CV_16U);
     cv::Mat color = cv::Mat::zeros(camera->colorSize(), CV_8UC3);
-    std::shared_ptr<pcl::visualization::CloudViewer> viewer(
-            new pcl::visualization::CloudViewer("Vertex"));
-    ColoredPointCloud::Ptr cloud(new ColoredPointCloud(
-            camera->depthSize().width, camera->depthSize().height));
+    // std::shared_ptr<pcl::visualization::CloudViewer> viewer(
+    //         new pcl::visualization::CloudViewer("Vertex"));
+    // ColoredPointCloud::Ptr cloud(new ColoredPointCloud(
+    //         camera->depthSize().width, camera->depthSize().height));
 
     cv::namedWindow("Depth", CV_WINDOW_AUTOSIZE | CV_WINDOW_FREERATIO);
     cv::namedWindow("Amplitude", CV_WINDOW_AUTOSIZE | CV_WINDOW_FREERATIO);
@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
         camera->captureDepth(depth);
         camera->captureAmplitude(amplitude);
         camera->captureColor(color);
-        camera->captureColoredPointCloud(cloud);
+        // camera->captureColoredPointCloud(cloud);
 
         cv::Mat d, a;
         depth.convertTo(d, CV_8U, 255.0 / 1000.0);
@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
         cv::imshow("Depth", d);
         cv::imshow("Amplitude", a);
         cv::imshow("Color", color);
-        viewer->showCloud(cloud);
+        // viewer->showCloud(cloud);
     }
 
     return 0;
